@@ -6,21 +6,23 @@ Usage in an example app:
 version: '3'
 services:
   example_app:
-      
+    
+    ...
+
     networks:
       - internal
       - web
     labels:
       - traefik.enable=true
-      - traefik.backend=switch
-      - traefik.http.services.switch.loadbalancer.server.port=3000
-      - traefik.http.routers.switch.rule=Host(`subdomain.example.com`)
+      - traefik.backend=example_app
+      - traefik.http.services.example_app.loadbalancer.server.port=3000
+      - traefik.http.routers.example_app.rule=Host(`subdomain.example.com`)
       # SSL configuration
-      - traefik.http.routers.switch.entrypoints=https
-      - traefik.http.routers.switch.tls=true
-      - traefik.http.routers.switch.tls.certresolver=http
+      - traefik.http.routers.example_app.entrypoints=https
+      - traefik.http.routers.example_app.tls=true
+      - traefik.http.routers.example_app.tls.certresolver=http
       # authentication
-      - traefik.http.routers.switch.middlewares=secureHeaders@file
+      - traefik.http.routers.example_app.middlewares=secureHeaders@file
 
 networks:
   internal:   
