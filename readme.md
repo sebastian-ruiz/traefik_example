@@ -28,3 +28,36 @@ networks:
   web:
     external: true
 ```
+
+Portainer example:
+
+```yml
+version: "3"
+
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer:latest
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+      - "9000"
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.backend=portainer
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.rule=Host(`portainer.example.com`)
+      # SSL configuration
+      - traefik.http.routers.portainer.entrypoints=https
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.tls.certresolver=http
+
+networks:
+  web:
+    external: true
+
+```
