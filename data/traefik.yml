@@ -1,0 +1,36 @@
+log:
+  level: "warn"
+
+api:
+  dashboard: true
+  debug: true
+
+accessLog:
+  filePath: /access.log
+  format: json
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  ssh:
+    address: ":1024"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    watch: true
+    network: web
+  file:
+    filename: /config.yml
+
+certificatesResolvers:
+  http:
+    acme:
+      email: hello@example.com
+      storage: acme.json
+      httpChallenge:
+        entryPoint: http
+

@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443
+
+    networks:
+      - web
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/traefik.yml:/traefik.yml
+      - ./data/acme.json:/acme.json
+      - ./data/config.yml:/config.yml
+      - ./data/access.log:/access.log
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.http.routers.traefik.rule=Host(`traefik.sruiz.uk`)
+      # SSL configuration
+      - traefik.http.routers.traefik.entrypoints=https
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=http
+
+networks:
+  web:
+    external: true
+
