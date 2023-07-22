@@ -21,7 +21,6 @@ services:
       - traefik.http.routers.example_app.entrypoints=https
       - traefik.http.routers.example_app.tls=true
       - traefik.http.routers.example_app.tls.certresolver=http
-      # authentication
       - traefik.http.routers.example_app.middlewares=secureHeaders@file
 
 networks:
